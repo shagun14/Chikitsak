@@ -260,7 +260,7 @@ $("#predict").click(function () {
         </div>
   </div>
 
-  <br>
+
 
   <div id="resultdiv" style="display: none;" >
         <div class="text-center">
@@ -324,5 +324,17 @@ $("#predict").click(function () {
 </div>
 
 
+
+  <br>
+{% for desc in des %}
+<p>{{desc}}</p>
+{% endfor %}
+<br>
+{% for prec in pre %}
+<p>{{prec}}</p>
+{% endfor %}
+
+<p>{{des}}</p>
+<p>{{pre}}</p>
 
 {% endblock %}

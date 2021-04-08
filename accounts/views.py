@@ -13,7 +13,7 @@ from django.core.mail import send_mail
 # Create your views here.
 
 
-   
+
 def logout(request):
     auth.logout(request)
     request.session.pop('patientid', None)

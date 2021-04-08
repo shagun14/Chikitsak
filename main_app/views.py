@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.http import JsonResponse
 from datetime import date
-
+import pandas as pd
+import numpy as np
 from django.contrib import messages
 from django.contrib.auth.models import User , auth
 from .models import patient , doctor , diseaseinfo , consultation ,rating_review
@@ -93,17 +94,20 @@ def pviewprofile(request, patientusername):
 
 
 def checkdisease(request):
-
-  diseaselist=['Fungal infection','Allergy','GERD','Chronic cholestasis','Drug Reaction','Peptic ulcer diseae','AIDS','Diabetes ',
-  'Gastroenteritis','Bronchial Asthma','Hypertension ','Migraine','Cervical spondylosis','Paralysis (brain hemorrhage)',
-  'Jaundice','Malaria','Chicken pox','Dengue','Typhoid','hepatitis A', 'Hepatitis B', 'Hepatitis C', 'Hepatitis D',
-  'Hepatitis E', 'Alcoholic hepatitis','Tuberculosis', 'Common Cold', 'Pneumonia', 'Dimorphic hemmorhoids(piles)',
-  'Heart attack', 'Varicose veins','Hypothyroidism', 'Hyperthyroidism', 'Hypoglycemia', 'Osteoarthristis',
-  'Arthritis', '(vertigo) Paroymsal  Positional Vertigo','Acne', 'Urinary tract infection', 'Psoriasis', 'Impetigo']
+    df3 = pd.read_csv("disease_riskFactors.csv", encoding='ISO-8859-1')
+    df4 = pd.read_csv("symptom_Description.csv")
 
 
+    diseaselist=['Fungal infection','Allergy','GERD','Chronic cholestasis','Drug Reaction','Peptic ulcer diseae','AIDS','Diabetes ',
+                 'Gastroenteritis','Bronchial Asthma','Hypertension ','Migraine','Cervical spondylosis','Paralysis (brain hemorrhage)',
+                 'Jaundice','Malaria','Chicken pox','Dengue','Typhoid','hepatitis A', 'Hepatitis B', 'Hepatitis C', 'Hepatitis D',
+                 'Hepatitis E', 'Alcoholic hepatitis','Tuberculosis', 'Common Cold', 'Pneumonia', 'Dimorphic hemmorhoids(piles)',
+                 'Heart attack', 'Varicose veins','Hypothyroidism', 'Hyperthyroidism', 'Hypoglycemia', 'Osteoarthristis',
+                 'Arthritis', '(vertigo) Paroymsal  Positional Vertigo','Acne', 'Urinary tract infection', 'Psoriasis', 'Impetigo']
 
-  symptomslist=['itching','skin_rash','nodal_skin_eruptions','continuous_sneezing','shivering','chills','joint_pain',
+
+
+    symptomslist=['itching','skin_rash','nodal_skin_eruptions','continuous_sneezing','shivering','chills','joint_pain',
   'stomach_pain','acidity','ulcers_on_tongue','muscle_wasting','vomiting','burning_micturition','spotting_ urination',
   'fatigue','weight_gain','anxiety','cold_hands_and_feets','mood_swings','weight_loss','restlessness','lethargy',
   'patches_in_throat','irregular_sugar_level','cough','high_fever','sunken_eyes','breathlessness','sweating',
@@ -129,33 +133,32 @@ def checkdisease(request):
   'silver_like_dusting','small_dents_in_nails','inflammatory_nails','blister','red_sore_around_nose',
   'yellow_crust_ooze']
 
-  alphabaticsymptomslist = sorted(symptomslist)
+    alphabaticsymptomslist = sorted(symptomslist)
 
   
 
 
-  if request.method == 'GET':
-    
-     return render(request,'patient/checkdisease/checkdisease.html', {"list2":alphabaticsymptomslist})
+    if request.method == 'GET':
+        return render(request,'patient/checkdisease/checkdisease.html', {"list2":alphabaticsymptomslist})
 
 
 
 
-  elif request.method == 'POST':
+    elif request.method == 'POST':
        
       ## access you data by playing around with the request.POST object
-      print(model)
-      inputno = int(request.POST["noofsym"])
-      print(inputno)
-      if (inputno == 0 ) :
-          return JsonResponse({'predicteddisease': "none",'confidencescore': 0 })
+        print(model)
+        inputno = int(request.POST["noofsym"])
+        print(inputno)
+        if (inputno == 0 ) :
+            return JsonResponse({'predicteddisease': "none",'confidencescore': 0 })
   
-      else :
+        else :
 
-        psymptoms = []
-        psymptoms = request.POST.getlist("symptoms[]")
+          psymptoms = []
+          psymptoms = request.POST.getlist("symptoms[]")
        
-        print(psymptoms)
+          print(psymptoms)
 
       
         """      #main code start from here...
@@ -185,6 +188,16 @@ def checkdisease(request):
         predicted = model.predict(inputtest)
         print("predicted disease is : ")
         print(predicted)
+
+        for i in df4['Disease']:
+          if i == predicted:
+              des = (df4[df4.Disease == i].Description).tolist()
+        print(des)
+
+        for i in df3['DNAME']:
+          if i == predicted:
+              pre = (df3[df3.DNAME == i].PRECAU).tolist()
+        print(pre)
 
         y_pred_2 = model.predict_proba(inputtest)
         confidencescore=y_pred_2.max() * 100
@@ -277,7 +290,7 @@ def checkdisease(request):
 
         print("disease record saved sucessfully.............................")
 
-        return JsonResponse({'predicteddisease': predicted_disease ,'confidencescore':confidencescore , "consultdoctor": consultdoctor})
+        return JsonResponse({'predicteddisease': predicted_disease ,'confidencescore':confidencescore , "consultdoctor": consultdoctor,"des":des,"pre":pre})
    
 
 
