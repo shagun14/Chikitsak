@@ -21,7 +21,9 @@ class patient(models.Model):
     address = models.CharField(max_length = 100)
     mobile_no = models.CharField(max_length = 15)
     gender = models.CharField(max_length = 10)
-
+     
+    def __str__(self):
+        return self.name
     
     @property
     def age(self):
@@ -54,8 +56,10 @@ class doctor(models.Model):
 
     specialization = models.CharField(max_length = 30)
 
-    rating = models.IntegerField(default=0)
-
+   
+    
+    def __str__(self):
+        return self.name
 
 
 #class sn(models.Model):
@@ -68,8 +72,12 @@ class diseaseinfo(models.Model):
     #symptomsname =models.ForeignKey(sn, null=True, on_delete=models.SET_NULL)
     symptomsname = ArrayField(models.CharField(max_length=200))
     confidence = models.DecimalField(max_digits=5, decimal_places=2)
+    #description = models.CharField(max_length = 200)
+    #precautions = models.CharField(max_length = 200)
     consultdoctor = models.CharField(max_length = 200)
 
+    def __str__(self):
+        return self.patient
 
 
 class consultation(models.Model):
@@ -82,25 +90,3 @@ class consultation(models.Model):
 
 
 
-
-
-class rating_review(models.Model):
-
-    patient = models.ForeignKey(patient ,null=True, on_delete=models.SET_NULL)
-    doctor = models.ForeignKey(doctor ,null=True, on_delete=models.SET_NULL)
-    
-    rating = models.IntegerField(default=0)
-    review = models.TextField( blank=True ) 
-
-
-    @property
-    def rating_is(self):
-        new_rating = 0
-        rating_obj = rating_review.objects.filter(doctor=self.doctor)
-        for i in rating_obj:
-            new_rating += i.rating
-       
-        new_rating = new_rating/len(rating_obj)
-        new_rating = int(new_rating)
-        
-        return new_rating

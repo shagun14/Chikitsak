@@ -115,12 +115,25 @@ $("#predict").click(function () {
       success: function (data) {
         document.getElementById('diseasefield').innerText = data["predicteddisease"];
         document.getElementById('percentage').innerText = data["confidencescore"]+"%";
+        
         percent=data["confidencescore"];
         disease=data["predicteddisease"];
+        
 
         $('#percentage').css('width', percent + "%");
 
         document.getElementById('diseasesearch').innerText = data["predicteddisease"];
+
+        document.getElementById('des').innerText = data["des"];
+        document.getElementById('pre').innerText = data["pre"];
+       
+        percent=data["des"];
+        
+
+        
+
+        document.getElementById('diseasesearch').innerText = data["predicteddisease"];
+       
 
         $("#href").attr("href","https://www.google.com/search?q="+ disease +"");
 
@@ -272,15 +285,24 @@ $("#predict").click(function () {
                     <span class="diseasefield" >predicted disease is : </span><span class="diseasefield" id="diseasefield" style="color: #092700; text-shadow: 2px 2px 4px rgb(36, 255, 45);"></span> <br>
                     <br>
                     <span class="diseasefield">confidence score of :  </span>
+                    
                     <span>
                           <div class="progress" style="display: inline-block;width:140px">
                               <div id="percentage" class="progress-bar" style="width: 0%">0%
+                                <br>
+                      
                               </div>
+                              
                           </div>
                     </span>
 
+         
                     </div>
               </div>
+              <span class="des" >description :   </span><span class="des" id="des" style="color: #092700; text-shadow: 2px 2px 4px rgb(36, 255, 45);"></span> <br>
+              <span class="pre" >precautions :   </span><span class="pre" id="pre" style="color: #092700; text-shadow: 2px 2px 4px rgb(36, 255, 45);"></span> <br>
+              
+            
 
         <div class="text-center mt-4 mb-4"> 
               <button class="btn btn-outline-success">

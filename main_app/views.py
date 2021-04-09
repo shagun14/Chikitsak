@@ -6,7 +6,7 @@ import pandas as pd
 import numpy as np
 from django.contrib import messages
 from django.contrib.auth.models import User , auth
-from .models import patient , doctor , diseaseinfo , consultation ,rating_review
+from .models import patient , doctor , diseaseinfo , consultation 
 from chats.models import Chat,Feedback
 
 # Create your views here.
@@ -188,15 +188,20 @@ def checkdisease(request):
         predicted = model.predict(inputtest)
         print("predicted disease is : ")
         print(predicted)
-
+        description = (df4.Description).tolist()
         for i in df4['Disease']:
+          
           if i == predicted:
               des = (df4[df4.Disease == i].Description).tolist()
+          
+        #print(description)
         print(des)
 
+        precautions = (df3.PRECAU).tolist()
         for i in df3['DNAME']:
           if i == predicted:
               pre = (df3[df3.DNAME == i].PRECAU).tolist()
+        print(precautions)
         print(pre)
 
         y_pred_2 = model.predict_proba(inputtest)
@@ -205,6 +210,8 @@ def checkdisease(request):
 
         confidencescore = format(confidencescore, '.0f')
         predicted_disease = predicted[0]
+        description = description
+        precautions = precautions
 
         
 
@@ -281,6 +288,8 @@ def checkdisease(request):
         no_of_symp = inputno
         symptomsname = psymptoms
         confidence = confidencescore
+        #description = description
+        #precautions = precautions
 
         diseaseinfo_new = diseaseinfo(patient=patient,diseasename=diseasename,no_of_symp=no_of_symp,symptomsname=symptomsname,confidence=confidence,consultdoctor=consultdoctor)
         diseaseinfo_new.save()
@@ -290,7 +299,7 @@ def checkdisease(request):
 
         print("disease record saved sucessfully.............................")
 
-        return JsonResponse({'predicteddisease': predicted_disease ,'confidencescore':confidencescore , "consultdoctor": consultdoctor,"des":des,"pre":pre})
+        return JsonResponse({'predicteddisease': predicted_disease ,'confidencescore':confidencescore , "consultdoctor": consultdoctor, "des":des,"pre":pre})
    
 
 

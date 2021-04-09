@@ -96,8 +96,40 @@ def signup_patient(request):
                 
                 patientnew = patient(user=user,name=name,dob=dob,gender=gender,address=address,mobile_no=mobile_no)
                 patientnew.save()
-                subject = 'Welcome to DataFlair'
-                message = 'Hope you are enjoying your Django Tutorials'
+                subject = 'Welcome to Chikitsak-your health partner'
+                message = """\
+Subject: Registration Succesfull.
+
+This message is to inform you that you have successfully registered with our services.
+
+Thankyou for choosing us :)
+
+On our Platform you can explore everything that you need from disease prediction, disease descriptions, how to overcome it, to interact with doctors and many more.
+
+You can even get an chat application to interact with doctors of ur choice .
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Please do not reply to this mail. This a computer generated message !!"""
+
                 recepient = str(email)
                 send_mail(subject,
                           message, EMAIL_HOST_USER, [recepient], fail_silently=False)
