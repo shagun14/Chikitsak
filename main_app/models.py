@@ -62,22 +62,15 @@ class doctor(models.Model):
         return self.name
 
 
-#class sn(models.Model):
-    #symptomsname = models.CharField(max_length = 200)
-
 class diseaseinfo(models.Model):
     patient = models.ForeignKey(patient , null=True, on_delete=models.SET_NULL)
     diseasename = models.CharField(max_length = 200)
     no_of_symp = models.IntegerField()
-    #symptomsname =models.ForeignKey(sn, null=True, on_delete=models.SET_NULL)
     symptomsname = ArrayField(models.CharField(max_length=200))
     confidence = models.DecimalField(max_digits=5, decimal_places=2)
-    #description = models.CharField(max_length = 200)
-    #precautions = models.CharField(max_length = 200)
+    
     consultdoctor = models.CharField(max_length = 200)
 
-    def __str__(self):
-        return self.patient
 
 
 class consultation(models.Model):

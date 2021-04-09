@@ -16,10 +16,3 @@ class Chat(models.Model):
 
 
 
-class Feedback(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    sender = models.ForeignKey(User, on_delete=models.CASCADE)
-    feedback = models.TextField()
-
-    def __unicode__(self):
-        return self.feedback

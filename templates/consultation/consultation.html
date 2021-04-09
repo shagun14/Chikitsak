@@ -205,45 +205,7 @@ img{ max-width:100%;}
 <div class="col" >
 
 
-{% if user.patient.is_patient  %}
-  <div class="container ml-5 mr-5">
-          <button type="button" class="btn btn-outline-secondary" data-toggle="collapse" data-target="#demo">Give Rating and Reviews to Doctor {{consultation.doctor.name}}</button>
-                  <div id="demo" class="collapse">
-                      
-                    <form action="{% url 'rate_review' consultation.id %}" method="POST"> 
-                       {% csrf_token %}
-                        <div class="form-group mt-2">
-                                <label for="sel1">Rate (Out of 5):</label>
-                                <div class="row">
-                                  <div class="col-sm-2">
-                                      <select class="form-control" id="sel1" name="rating" > 
-                                   
-                                          <option>1</option>
-                                          <option>2</option>
-                                          <option>3</option>
-                                          <option>4</option>
-                                          <option>5</option>
-                                        </select>
-                                  </div>
-                                  <div class="col-sm-10">
-                                      <i class="material-icons" style="font-size:36px;color:yellow">star_half</i>
-                             
-                                  </div>
-                                </div>
-                               
-                              
 
-                                <br>
-                                <label for="comment">Reviews:</label>
-                                <textarea class="form-control" rows="5" id="comment" name="review"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
-
-                  </div>
-
-  </div>
-    {% endif %}
   <div class="container mt-4 ml-5 mr-5">
           <button type="button" class="btn btn-outline-danger mb-4" data-toggle="collapse" data-target="#demo2">Close Consultation</button>
           <div id="demo2" class="collapse">Are you sure to close consultation ?
@@ -294,7 +256,7 @@ img{ max-width:100%;}
 
 
 
-                
+{% if user.doctor.is_doctor  %}
                             <div class="card mt-5 ml-5 mr-5 mb-5" >
                                 <div class="text-center " style="width:100px">
                                     <img class="card-img-top " src="{% static 'homepage/patient.png' %}" alt="Card image" style="width:100%;">
@@ -307,21 +269,24 @@ img{ max-width:100%;}
                                   <a href="{% url 'pviewprofile' consultation.patient.user.username %}" class="btn btn-primary">View Profile</a>
                                 </div>
                             </div>
-                
-                       
-                                <div class="card mt-5 ml-5 mr-5 mb-5" >
-                                        <div class="text-center " style="width:100px">
-                                            <img class="card-img-top" src="{% static 'homepage/doctor.png' %}" alt="Card image" style="width:100%;">
-                                        </div>
-                                        <div class="card-body" style="display: inline-block;">
-                                          <h4 class="card-title">Doctor name : {{consultation.doctor.name}}</h4>
-                                          <p class="card-text">Doctor ID - {{consultation.doctor.user_id}}</p>
-                                          <p class="card-text">Doctor email - {{consultation.doctor.user.email}}</p>
-                                          <p class="card-text">Doctor phone no. - {{consultation.doctor.mobile_no}}</p>
-                                          <p class="card-text">Doctor rating is - {{consultation.doctor.rating}}/5</p>
-                                          <a href="{% url 'dviewprofile' consultation.doctor.user.username %}" class="btn btn-primary">View Profile</a>
-                                        </div>
-                                </div>
+                {% endif %}
+                      
+                {% if user.patient.is_patient  %}
+<div class="card mt-5 ml-5 mr-5 mb-5" >
+  <div class="text-center " style="width:100px">
+      <img class="card-img-top" src="{% static 'homepage/doctor.png' %}" alt="Card image" style="width:100%;">
+  </div>
+  <div class="card-body" style="display: inline-block;">
+    <h4 class="card-title">Doctor name : {{consultation.doctor.name}}</h4>
+    <p class="card-text">Doctor ID - {{consultation.doctor.user_id}}</p>
+    <p class="card-text">Doctor email - {{consultation.doctor.user.email}}</p>
+    <p class="card-text">Doctor phone no. - {{consultation.doctor.mobile_no}}</p>
+    
+    <a href="{% url 'dviewprofile' consultation.doctor.user.username %}" class="btn btn-primary">View Profile</a>
+  </div>
+</div>
+    {% endif %}
+                                
                         
 
                                 

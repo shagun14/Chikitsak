@@ -7,14 +7,14 @@ import numpy as np
 from django.contrib import messages
 from django.contrib.auth.models import User , auth
 from .models import patient , doctor , diseaseinfo , consultation 
-from chats.models import Chat,Feedback
+from chats.models import Chat
 
 # Create your views here.
 
 
 #loading trained_model
 import joblib as jb
-model = jb.load('trained_model')
+model = jb.load('NBMulti')
 
 print(model)
 
@@ -364,9 +364,8 @@ def dviewprofile(request, doctorusername):
 
          
          duser = User.objects.get(username=doctorusername)
-         r = rating_review.objects.filter(doctor=duser.doctor)
-       
-         return render(request,'doctor/view_profile/view_profile.html', {"duser":duser, "rate":r} )
+         
+         return render(request,'doctor/view_profile/view_profile.html', {"duser":duser} )
 
 
 
